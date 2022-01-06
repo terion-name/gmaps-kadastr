@@ -3,13 +3,18 @@ const maxZoom = 16;
 
 function initMap() {
     const map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 16,
+        zoom: 12,
         center: { lat: 50.4535886, lng: 30.6015252 },
         mapTypeControlOptions: {
             mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain']
         },
         mapTypeId: 'satellite'
     });
+    if(navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+            map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude})
+        });
+    }
     createOverlay(map)
     createSearch(map)
 }
@@ -51,7 +56,7 @@ function createOverlay(map) {
         name: "Kadastr",
         alt: "Kadastr layer",
         minZoom: 0,
-        maxZoom: 16,
+        // maxZoom: 16,
         opacity: 1.0
     });
 

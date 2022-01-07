@@ -40,11 +40,21 @@ function initMap() {
 
             navigator.geolocation.watchPosition((position) => {
                 positionMarker.setPosition({lat: position.coords.latitude, lng: position.coords.longitude});
-                positionMarker.setIcon(Object.assign(icon, {rotation: position.heading}));
+                if (position.heading) {
+                    positionMarker.setIcon(Object.assign(icon, {rotation: position.heading}));
+                }
                 if (trackPosition) {
                     map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude})
                 }
             }, null, {enableHighAccuracy: true})
+            // for safari
+            window.addEventListener('deviceorientation', function(e) {
+                if (e.webkitCompassHeading) {
+                    // e.webkitCompassHeading
+                    // e.webkitCompassAccuracy
+                    positionMarker.setIcon(Object.assign(icon, {rotation: e.webkitCompassHeading}));
+                }
+           }, false);
 
             const controlUI = document.createElement("div");
             controlUI.className = 'control-ui'
